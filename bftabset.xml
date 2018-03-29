@@ -21,7 +21,7 @@
 	</languages>
 
 	<updateservers>
-		<server type="extension" priority="1" name="Content - Load Bible reference as a popup by BrainforgeUK">
+		<server type="extension" priority="1" name="Content - Create tabs in article by BrainforgeUK.">
 			https://brainforge.co.uk/component/bfupdater?element=plg_content_bftabset.xml
 		</server>
 	</updateservers>
