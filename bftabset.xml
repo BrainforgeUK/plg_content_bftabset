@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.8.0" type="plugin" group="content" method="upgrade">
+	<name>PLG_CONTENT_BFTABSET</name>
+  <creationDate>29 March 2018</creationDate>
+  <author>Jonathan Brain</author>
+  <authorEmail>brainforge@btinternet.com</authorEmail>
+  <authorUrl>http://www.brainforge.co.uk</authorUrl>
+  <copyright>Copyright 2018 Jonathan Brain. All rights reserved.</copyright>
+  <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+  <version>3.8.0</version>
+
+	<description>PLG_CONTENT_BFTABSET_XML_DESCRIPTION</description>
+
+	<files>		
+		<filename plugin="bftabset">bftabset.php</filename>
+	</files>
+
+	<scriptfile>install.bftabset.php</scriptfile>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.plg_content_bftabset.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_content_bftabset.sys.ini</language>
+	</languages>
+
+	<updateservers>
+		<server type="extension" priority="1" name="Content - Load Bible reference as a popup by BrainforgeUK">
+			https://brainforge.co.uk/component/bfupdater?element=plg_content_bftabset.xml
+		</server>
+	</updateservers>
+</extension>
