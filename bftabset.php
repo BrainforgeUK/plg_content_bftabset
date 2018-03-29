@@ -15,7 +15,7 @@ jimport('joomla.plugin.plugin');
 class plgContentBftabset extends JPlugin
 {
 	const TABSETSTART = '{bftabset-start}';
-	const TABSETTAB = '{bftabset-tab ';
+	const TABSETTAB = '{bftabset-tab';
 	const TABSETEND = '{bftabset-end}';
 
 	static $tabsetid = 0;
