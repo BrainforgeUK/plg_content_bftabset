@@ -15,8 +15,6 @@
 		<filename plugin="bftabset">bftabset.php</filename>
 	</files>
 
-	<scriptfile>install.bftabset.php</scriptfile>
-
 	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.plg_content_bftabset.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.plg_content_bftabset.sys.ini</language>
