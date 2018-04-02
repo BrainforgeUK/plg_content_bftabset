@@ -63,7 +63,7 @@ class plgContentBftabset extends JPlugin
 		{
 			if (@sscanf($tabsetActive, '%d,%d', $tabsetid, $tabid) == 2)
 			{
-				if ($tabsetid == self::$tabid &&
+				if ($tabsetid == self::$tabsetid &&
 					$tabid >= 0 && $tabid < count($tabs))
 				{
 					$active = 'bftabset-tab-' . (self::$tabid + $tabid);
