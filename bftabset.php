@@ -57,8 +57,22 @@ class plgContentBftabset extends JPlugin
 			$tabs[$tabTitle] = trim(substr($tabsetText, $tabTitleEnd+1));
 		}
 
+		$active = 'bftabset-tab-' . self::$tabid;
+		$tabsetActive = JFactory::getApplication()->input->getVar('tabsetactive');
+		if (!empty($tabsetActive))
+		{
+			if (@sscanf($tabsetActive, '%d,%d', $tabsetid, $tabid) == 2)
+			{
+				if ($tabsetid == self::$tabid &&
+					$tabid >= 0 && $tabid < count($tabs))
+				{
+					$active = 'bftabset-tab-' . (self::$tabid + $tabid);
+				}
+			}
+		}
+
 		$thisTabsetName = 'bftabset-' . (self::$tabsetid++);
-		$tabSet = JHtml::_('bootstrap.startTabSet', $thisTabsetName, array('active' => 'bftabset-tab-' . self::$tabid));
+		$tabSet = JHtml::_('bootstrap.startTabSet', $thisTabsetName, array('active' => $active));
 		foreach($tabs as $title=>$content)
 		{
 			$tabSet .= JHtml::_('bootstrap.addTab', $thisTabsetName, 'bftabset-tab-' . (self::$tabid++), $title);
