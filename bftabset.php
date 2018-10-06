@@ -18,8 +18,11 @@ class plgContentBftabset extends JPlugin
 	const TABSETTAB = '{bftabset-tab';
 	const TABSETEND = '{bftabset-end}';
 
-	static $tabsetid = 0;
-	static $tabid = 0;
+	const TABSETPREFIX = 'bftabset-';
+
+	private static $tabsetid = 0;
+	private static $tabid = 0;
+	private static $tabNameList = null;
 
 	public function onContentPrepare($context, &$article, &$params, $limitstart)
 	{
@@ -57,25 +60,24 @@ class plgContentBftabset extends JPlugin
 			$tabs[$tabTitle] = trim(substr($tabsetText, $tabTitleEnd+1));
 		}
 
-		$active = 'bftabset-tab-' . self::$tabid;
-		$tabsetActive = JFactory::getApplication()->input->getVar('tabsetactive');
-		if (!empty($tabsetActive))
+		if (empty($tabs)) return;
+
+		$thisTabsetName = self::TABSETPREFIX . (self::$tabsetid++);
+		$tabPrefix = self::TABSETPREFIX . $article->id . '-tab-';
+
+		$active = JFactory::getApplication()->input->getVar('tabid', null);
+		if (!preg_match('/^' . $tabPrefix . '[0-9]+$/', $active))
 		{
-			if (@sscanf($tabsetActive, '%d,%d', $tabsetid, $tabid) == 2)
-			{
-				if ($tabsetid == self::$tabsetid &&
-					$tabid >= 0 && $tabid < count($tabs))
-				{
-					$active = 'bftabset-tab-' . (self::$tabid + $tabid);
-				}
-			}
+			$active = $tabPrefix . self::$tabid;
 		}
 
-		$thisTabsetName = 'bftabset-' . (self::$tabsetid++);
+		self::$tabNameList = array();
 		$tabSet = JHtml::_('bootstrap.startTabSet', $thisTabsetName, array('active' => $active));
 		foreach($tabs as $title=>$content)
 		{
-			$tabSet .= JHtml::_('bootstrap.addTab', $thisTabsetName, 'bftabset-tab-' . (self::$tabid++), $title);
+			$thisTabName = $tabPrefix . (self::$tabid++);
+			self::$tabNameList[] = $thisTabName;
+			$tabSet .= JHtml::_('bootstrap.addTab', $thisTabsetName, $thisTabName, $title);
 			$tabSet .= $content;
 			$tabSet .= JHtml::_('bootstrap.endTab');
 		}
@@ -84,7 +86,47 @@ class plgContentBftabset extends JPlugin
 		$article->text = substr($article->text, 0, $tabsetStart) .
 			$tabSet .
 			substr($article->text, $tabsetEnd);
+
+		JFactory::getDocument()->addScriptDeclaration('
+jQuery( document ).ready(function() {
+	if (location.hash) {
+		var $a = jQuery(".nav-tabs a[href=\"" + location.hash + "\"]");
+		if ($a.length) $a.tab("show");
+	}
+});
+');
+
 		return;
+	}
+
+	/**
+	 * Listener for the `onAfterRender` event
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function onAfterRender()
+	{
+		$documentbody = JResponse::getBody();
+
+		$documentbody = preg_replace_callback(
+			'@/(' . self::TABSETPREFIX . '[0-9]+-tab-[0-9]+)"@',
+			function ($matches) {
+				if (!empty(self::$tabNameList) && in_array($matches[1], self::$tabNameList))
+				{
+					return '#' . $matches[1] . '" onclick=\'
+var $a = jQuery(".nav-tabs a[href=\"#' . $matches[1] . '\"]");
+if ($a.length) $a.tab("show");
+return false;					
+\'';
+				}
+				return '?tabid=' . $matches[1] . '"';
+			},
+			$documentbody
+		);
+
+		JResponse::setBody($documentbody);
 	}
 }
 ?>
