@@ -72,7 +72,7 @@ class plgContentBftabset extends JPlugin
 		}
 
 		self::$tabNameList = array();
-		$tabSet = JHtml::_('bootstrap.startTabSet', $thisTabsetName, array('active' => $active));
+		$tabSet = JHtml::_('bootstrap.startTabSet', $thisTabsetName);
 		foreach($tabs as $title=>$content)
 		{
 			$thisTabName = $tabPrefix . (self::$tabid++);
@@ -89,10 +89,12 @@ class plgContentBftabset extends JPlugin
 
 		JFactory::getDocument()->addScriptDeclaration('
 jQuery( document ).ready(function() {
-	if (location.hash) {
-		var $a = jQuery(".nav-tabs a[href=\"" + location.hash + "\"]");
-		if ($a.length) $a.tab("show");
+	var hash = location.hash;
+	if (!hash) {
+		hash = "#' . $active . '";
 	}
+	var $a = jQuery(".nav-tabs a[href=\"" + hash + "\"]");
+	if ($a.length) $a.tab("show");
 });
 ');
 
@@ -121,7 +123,7 @@ if ($a.length) $a.tab("show");
 return false;					
 \'';
 				}
-				return '?tabid=' . $matches[1] . '"';
+				return '#' . $matches[1] . '"';
 			},
 			$documentbody
 		);
