@@ -7,7 +7,7 @@
   <authorUrl>http://www.brainforge.co.uk</authorUrl>
   <copyright>Copyright 2018 Jonathan Brain. All rights reserved.</copyright>
   <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-  <version>3.8.11</version>
+  <version>3.8.13</version>
 
 	<description>PLG_CONTENT_BFTABSET_XML_DESCRIPTION</description>
 
@@ -19,6 +19,59 @@
 		<language tag="en-GB">language/en-GB/en-GB.plg_content_bftabset.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.plg_content_bftabset.sys.ini</language>
 	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="css"
+					  label="PLG_CONTENT_BFTABSET_CSS_FIELDSET">
+
+				<field
+						name="cssnote" type="note"
+						description="PLG_CONTENT_BFTABSET_CSS_FIELDSET_DESC" />
+
+				<field
+						name="cssmode" type="radio" class="btn-group"
+						label="PLG_CONTENT_BFTABSET_CSSMODE_LABEL" default="0">
+					<option value="0">JOFF</option>
+					<option value="1">JON</option>
+				</field>
+
+				<field
+						name="customcss" type="textarea"
+						label="PLG_CONTENT_BFTABSET_CSSCUSTOM_LABEL"
+						showon="cssmode:1"
+						filter="raw"
+						rows="10"
+						cols="20"
+						default="">
+				</field>
+			</fieldset>
+
+			<fieldset name="js"
+					  label="PLG_CONTENT_BFTABSET_JS_FIELDSET">
+				<field
+						name="jsnote" type="note"
+						description="PLG_CONTENT_BFTABSET_JS_FIELDSET_DESC" />
+
+				<field
+						name="jsmode" type="radio" class="btn-group"
+						label="PLG_CONTENT_BFTABSET_JSMODE_LABEL" default="0">
+					<option value="0">JOFF</option>
+					<option value="1">JON</option>
+				</field>
+
+				<field
+						name="customjs" type="textarea"
+						label="PLG_CONTENT_BFTABSET_JSCUSTOM_LABEL"
+						showon="jsmode:1"
+						filter="raw"
+						rows="10"
+						cols="20"
+						default="">
+				</field>
+			</fieldset>
+		</fields>
+	</config>
 
 	<updateservers>
 		<server type="extension" priority="1" name="Content - Create tabs in article by BrainforgeUK.">

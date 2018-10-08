@@ -98,6 +98,24 @@ jQuery( document ).ready(function() {
 });
 ');
 
+		$doc = JFactory::getDocument();
+		if($this->params->get('cssmode'))
+		{
+			$css = trim($this->params->get('customcss'));
+			if (!empty($css))
+			{
+				$doc->addStyleDeclaration($css);
+			}
+		}
+		if($this->params->get('jsmode'))
+		{
+			$js = trim($this->params->get('customjs'));
+			if (!empty($js))
+			{
+				$doc->addScriptDeclaration($js);
+			}
+		}
+
 		return;
 	}
 
