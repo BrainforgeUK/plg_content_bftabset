@@ -2,7 +2,7 @@
 /**
  * @package plugin Create tabs
  * @version 2.0.0
- * @copyright Copyright (C) 2018 Jonathan Brain - brainforge. All rights reserved.
+ * @copyright Copyright (C) 2018-2020 Jonathan Brain - brainforge. All rights reserved.
  * @license GPL
  * @author http://www.brainforge.co.uk
  */
@@ -20,6 +20,7 @@ class plgContentBftabset extends JPlugin
 
 	const TABSETPREFIX = 'bftabset-';
 
+	private static $inmodule = false;
 	private static $tabsetid = 0;
 	private static $tabid = 0;
 	private static $tabNameList = null;
@@ -60,10 +61,25 @@ class plgContentBftabset extends JPlugin
 			$tabs[$tabTitle] = trim(substr($tabsetText, $tabTitleEnd+1));
 		}
 
-		if (empty($tabs)) return;
+		if (empty($tabs)) {
+			return;
+		}
 
 		$thisTabsetName = self::TABSETPREFIX . (self::$tabsetid++);
-		$tabPrefix = self::TABSETPREFIX . $article->id . '-tab-';
+		if (empty($article->id))
+		{
+			if (self::$inmodule)
+			{
+				// Can only be used in one module on a page
+				return;
+			}
+			$tabPrefix = self::TABSETPREFIX . '0-tab-';
+			self::$inmodule = true;
+		}
+		else
+		{
+			$tabPrefix = self::TABSETPREFIX . $article->id . '-tab-';
+		}
 
 		$active = JFactory::getApplication()->input->getVar('tabid', null);
 		if (!preg_match('/^' . $tabPrefix . '[0-9]+$/', $active))
@@ -128,7 +144,13 @@ jQuery( document ).ready(function() {
 	 */
 	public function onAfterRender()
 	{
+		$app = JFactory::getApplication();
+		if($app->isAdmin()) return true;
+
 		$documentbody = JResponse::getBody();
+
+		$x1 = strpos($documentbody, '/' . self::TABSETPREFIX);
+		$x2 = strpos($documentbody, '/' . self::TABSETPREFIX . '0-tab-');
 
 		$documentbody = preg_replace_callback(
 			'@/(' . self::TABSETPREFIX . '[0-9]+-tab-[0-9]+)"@',
@@ -137,7 +159,10 @@ jQuery( document ).ready(function() {
 				{
 					return '#' . $matches[1] . '" onclick=\'
 var $a = jQuery(".nav-tabs a[href=\"#' . $matches[1] . '\"]");
-if ($a.length) $a.tab("show");
+if ($a.length) {
+  $a.tab("show");
+  $a.scrollTo();
+}
 return false;					
 \'';
 				}
