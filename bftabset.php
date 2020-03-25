@@ -149,11 +149,8 @@ jQuery( document ).ready(function() {
 
 		$documentbody = JResponse::getBody();
 
-		$x1 = strpos($documentbody, '/' . self::TABSETPREFIX);
-		$x2 = strpos($documentbody, '/' . self::TABSETPREFIX . '0-tab-');
-
 		$documentbody = preg_replace_callback(
-			'@/(' . self::TABSETPREFIX . '[0-9]+-tab-[0-9]+)"@',
+			'@/(' . self::TABSETPREFIX . '[0-9]+-tab-[0-9]+)[^"]*"@',
 			function ($matches) {
 				if (!empty(self::$tabNameList) && in_array($matches[1], self::$tabNameList))
 				{
