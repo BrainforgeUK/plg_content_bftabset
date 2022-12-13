@@ -28,7 +28,7 @@ class plgContentBftabset extends JPlugin
 	public function onContentPrepare($context, &$article, &$params, $limitstart)
 	{
 		$app = JFactory::getApplication();
-		if($app->isAdmin()) return true;
+		if(!$app->isClient('site')) return true;
 
 		$tabsetStart = strpos($article->text, self::TABSETSTART);
 		if ($tabsetStart === false) return;
