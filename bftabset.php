@@ -8,6 +8,8 @@
  */
 
 // No direct access
+use Joomla\CMS\Factory;
+
 defined('_JEXEC') or die;
 
 jimport('joomla.plugin.plugin');
@@ -145,9 +147,9 @@ jQuery( document ).ready(function() {
 	public function onAfterRender()
 	{
 		$app = JFactory::getApplication();
-		if($app->isAdmin()) return true;
+		if(!$app->isClient('site')) return true;
 
-		$documentbody = JResponse::getBody();
+		$documentbody = Factory::getApplication()->getBody();
 
 		$documentbody = preg_replace_callback(
 			'@/(' . self::TABSETPREFIX . '[0-9]+-tab-[0-9]+)[^"]*"@',
@@ -168,7 +170,7 @@ return false;
 			$documentbody
 		);
 
-		JResponse::setBody($documentbody);
+		Factory::getApplication()->setBody($documentbody);
 	}
 }
 ?>
